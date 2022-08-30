@@ -23,3 +23,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register',        [ApiController::class, 'register']);
 Route::post('/consult',         [ApiController::class, 'consult']);
 Route::post('/recharge',        [ApiController::class, 'recharge']);
+Route::post('/payment',         [ApiController::class, 'payment']);

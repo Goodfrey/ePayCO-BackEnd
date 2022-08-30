@@ -180,4 +180,86 @@ class ApiController extends Controller
         }
 
     }
+
+    public function payment(Request $request)
+    {
+
+        if($request->getContent() != '')
+        {
+            $validation     =   User::validateRecharge($request->request->all());
+
+            if($validation == true)
+            {
+                $user       =   User::ValidateUser($request->request->all());
+
+                if($user != false)
+                {
+                    $value      =   Invoices::GetValue();
+
+                    $myWallet   =   $user[0]->getWallet($user[0]->profile);
+                    $balance    =   $myWallet->balanceFloat;
+
+                    if($balance >= $value)
+                    {
+                        $token  =   bin2hex(random_bytes(6));
+                        $id     =   bin2hex(random_bytes(6));
+                        $iData  =   [
+                            'user'      =>  $user[0]->id,
+                            'amount'    =>  $value,
+                            'session'   =>  $id,
+                            'token'     =>  $token
+                        ];
+
+                        $invoices   =   Invoices::CreateInvo($iData);
+
+                        if($invoices == true)
+                        {
+                            $email  =   \Mail::to($user[0]->email)->send(new \App\Mail\SendInvoice(['token' => $token, 'id' => $id]));
+
+
+                            return \response()->json([
+                                'status'    =>  true,
+                                'message'   =>  'Se ha enviado un email con la informacion para su confirmacion de compra.'
+                            ], Response::HTTP_OK); 
+
+                        }else{
+                            return \response()->json([
+                                'status'    =>  false,
+                                'message'   =>  'Error el crear la compra, intente nuevamente'
+                            ], Response::HTTP_OK); 
+                        
+                        }
+
+                    }else{
+                        return \response()->json([
+                            'status'    =>  false,
+                            'message'   =>  'Fondo insuficiente, el balance de su Billetera es: '.$myWallet->balanceFloat.' factura: '.$value.''
+                        ], Response::HTTP_OK); 
+                    }
+
+                }else{
+                    return \response()->json([
+                        'status'    =>  false,
+                        'message'   =>  'Datos de usuario invalidos o no existen.',
+                    ], Response::HTTP_OK);                    
+                }
+
+            }else{
+                return \response()->json([
+                    'status'    =>  false,
+                    'message'   =>  'Campo inexistente o contiene valores diferentes a los requeridos',
+                ], Response::HTTP_OK);
+            
+            }
+
+        }else{
+
+            return \response()->json([
+                'status'    =>  false,
+                'message'   =>  'Debe enviar toda la informacion solicitada',
+            ], Response::HTTP_OK);
+        
+        }
+
+    }
 }
