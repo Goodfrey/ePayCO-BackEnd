@@ -262,4 +262,79 @@ class ApiController extends Controller
         }
 
     }
+
+    public function confirmation(Request $request)
+    {
+
+        if($request->getContent() != '')
+        {
+            $validation     =   Invoices::ValidateInfo($request->request->all());
+
+            if($validation == true)
+            {
+                $invo   =   Invoices::GetInvo($request->request->all());
+
+
+                if( ($invo != false) && ($invo[0]->status_id == 1))
+                {
+                    $user       =   User::UserByID($invo[0]->user_id);
+
+
+                    $myWallet   =   $user[0]->getWallet($user[0]->profile);
+                    $balance    =   $myWallet->balanceFloat;
+
+                    if($balance >= $invo[0]->amount)
+                    {
+                        
+                        $upd    =   Invoices::UpdateInvo($invo[0]->code);
+
+                        if( ($upd == true) && ($invo[0]->status_id == 1) )
+                        {
+                            $myWallet   =   $user[0]->getWallet($user[0]->profile);
+                            $myWallet->WithdrawFloat($invo[0]->amount, ['Description' => 'PAYMENT INVOICE: '.$invo[0]->code.' - Amount: '.$invo[0]->code.' - Status: Success']);
+                            $balance    =   $myWallet->balanceFloat;
+
+                            return \response()->json([
+                                'status'    =>  true,
+                                'message'   =>  'Pago procesado con exito, el balance de su Billetera es: '.$balance.''
+                            ], Response::HTTP_OK); 
+
+                        }else{
+                            return \response()->json([
+                                'status'    =>  false,
+                                'message'   =>  'Error al procesar su compra, pago realizado con anterioridad'
+                            ], Response::HTTP_OK); 
+                        }
+
+                    }else{
+                        return \response()->json([
+                            'status'    =>  false,
+                            'message'   =>  'Fondo insuficiente, el balance de su Billetera es: '.$myWallet->balanceFloat
+                        ], Response::HTTP_OK); 
+                    }
+
+                }else{
+                    return \response()->json([
+                        'status'    =>  false,
+                        'message'   =>  'Informacion sobre la compra no encontrada o pago realizado con anterioridad.',
+                    ], Response::HTTP_OK);                    
+                }
+
+            }else{
+                return \response()->json([
+                    'status'    =>  false,
+                    'message'   =>  'Campos requeridos Invalidos, intente nuevamente',
+                ], Response::HTTP_OK);
+            }
+
+        }else{
+
+            return \response()->json([
+                'status'    =>  false,
+                'message'   =>  'Debe enviar toda la informacion solicitada',
+            ], Response::HTTP_OK);
+        
+        }
+
+    }
 }
