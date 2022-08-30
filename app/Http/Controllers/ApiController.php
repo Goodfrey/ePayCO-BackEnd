@@ -73,4 +73,53 @@ class ApiController extends Controller
         }
 
     }
+
+    public function consult(Request $request)
+    {
+
+        if($request->getContent() != '')
+        {
+            $validation     =   User::validateRecharge($request->request->all());
+
+            if($validation == true)
+            {
+
+                $user       =   User::ValidateUser($request->request->all());
+
+                if( $user != false)
+                {
+                    $user       =   User::UserByID($user[0]->id);
+
+                    $myWallet   =   $user[0]->getWallet($user[0]->profile);
+                    $balance    =   $myWallet->balanceFloat;
+
+                    return \response()->json([
+                        'status'    =>  true,
+                        'message'   =>  'El balance de su Billetera es: '.$balance.''
+                    ], Response::HTTP_OK); 
+
+                }else{
+                    return \response()->json([
+                        'status'    =>  false,
+                        'message'   =>  'Datos de usuario invalidos o no existen.',
+                    ], Response::HTTP_OK);                    
+                }
+
+            }else{
+                return \response()->json([
+                    'status'    =>  false,
+                    'message'   =>  'Campos requeridos Invalidos, intente nuevamente',
+                ], Response::HTTP_OK);
+            }
+
+        }else{
+
+            return \response()->json([
+                'status'    =>  false,
+                'message'   =>  'Debe enviar toda la informacion solicitada',
+            ], Response::HTTP_OK);
+        
+        }
+
+    }
 }
