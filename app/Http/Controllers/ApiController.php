@@ -122,4 +122,62 @@ class ApiController extends Controller
         }
 
     }
+
+    public function recharge(Request $request)
+    {
+
+        if($request->getContent() != '')
+        {
+            $validation     =   User::validateRecharge($request->request->all());
+
+            if($validation == true)
+            {
+                $valAmount  =   User::validateAmount($request->request->all());
+
+                if($valAmount == true)
+                {
+                    $user       =   User::ValidateUser($request->request->all());
+
+                    if($user != false)
+                    {
+                        $myWallet   =   $user[0]->getWallet($user[0]->profile);
+                        $myWallet->depositFloat($request->request->all()['valor']);
+
+                        $myWallet   =   $user[0]->getWallet($user[0]->profile);
+
+                        return \response()->json([
+                            'status'    =>  true,
+                            'message'   =>  'El Balance de Billetera es: '.$myWallet->balanceFloat,
+                        ], Response::HTTP_OK); 
+
+                    }else{
+                        return \response()->json([
+                            'status'    =>  false,
+                            'message'   =>  'Informacion de cliente no encontrado, intente nuevamente',
+                        ], Response::HTTP_OK);                    
+                    }
+                }else{
+                    return \response()->json([
+                        'status'    =>  false,
+                        'message'   =>  'El valor de la recarga debe ser mayor a 0, intente nuevamente',
+                    ], Response::HTTP_OK);  
+                }
+
+            }else{
+                return \response()->json([
+                    'status'    =>  false,
+                    'message'   =>  'Campos inexistente o contiene valores diferentes a numericos',
+                ], Response::HTTP_OK);
+            }
+
+        }else{
+
+            return \response()->json([
+                'status'    =>  false,
+                'message'   =>  'Debe enviar toda la informacion solicitada',
+            ], Response::HTTP_OK);
+        
+        }
+
+    }
 }
