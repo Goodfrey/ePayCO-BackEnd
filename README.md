@@ -27,3 +27,10 @@ Este sistema fue probado mediante el WampServer y sus Virtual Host, por lo que s
 Adicional se anexa un video donde se puede visualizar el funcionamiento del mismo.
 
 https://www.youtube.com/watch?v=XUwITgjmTGs
+
+PD: Ejecutar los siguientes comandos
+
+- composer install
+- php artisan migrate
+
+Corregir los datos del email y base de datos en el archivo .ENV
