@@ -43,7 +43,7 @@ class ApiController extends Controller
                         return \response()->json([
                             'status'    =>  false,
                             'message'   =>  'Error al crear usuario',
-                        ], 400);
+                        ], Response::HTTP_OK);
                     }
                 
                 }else{
@@ -68,7 +68,7 @@ class ApiController extends Controller
             return \response()->json([
                 'status'    =>  false,
                 'message'   =>  'Debe enviar toda la informacion solicitada',
-            ], 400);
+            ], Response::HTTP_OK);
         
         }
 

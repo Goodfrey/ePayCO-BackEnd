@@ -1,0 +1,201 @@
+{
+	"info": {
+		"_postman_id": "d1a88d2d-435b-4535-8243-0df38ebc333f",
+		"name": "ePayCO",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "confirmation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "token",
+							"value": "a79fd6171130",
+							"type": "default"
+						},
+						{
+							"key": "session",
+							"value": "276913a70c39",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://http://backend.test/api/confirmation",
+					"protocol": "http",
+					"host": [
+						"http"
+					],
+					"port": "",
+					"path": [
+						"",
+						"backend.test",
+						"api",
+						"confirmation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "nombre",
+							"value": "Carla Rivero",
+							"type": "default"
+						},
+						{
+							"key": "email",
+							"value": "carlitiys469@gmail.com",
+							"type": "default"
+						},
+						{
+							"key": "celular",
+							"value": "584241234567",
+							"type": "default"
+						},
+						{
+							"key": "documento",
+							"value": "17728873",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://backend.test/api/register",
+					"protocol": "http",
+					"host": [
+						"backend",
+						"test"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "consult",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "celular",
+							"value": "584241234567",
+							"type": "default"
+						},
+						{
+							"key": "documento",
+							"value": "17728873",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://backend.test/api/consult",
+					"protocol": "http",
+					"host": [
+						"backend",
+						"test"
+					],
+					"path": [
+						"api",
+						"consult"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "recharge",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "celular",
+							"value": "584241234567",
+							"type": "default"
+						},
+						{
+							"key": "valor",
+							"value": "75.00",
+							"type": "default"
+						},
+						{
+							"key": "documento",
+							"value": "17728873",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://backend.test/api/recharge",
+					"protocol": "http",
+					"host": [
+						"backend",
+						"test"
+					],
+					"path": [
+						"api",
+						"recharge"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "payment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "celular",
+							"value": "584269876543",
+							"type": "default"
+						},
+						{
+							"key": "documento",
+							"value": "4827583",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://backend.test/api/payment",
+					"protocol": "http",
+					"host": [
+						"backend",
+						"test"
+					],
+					"path": [
+						"api",
+						"payment"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
